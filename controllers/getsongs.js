@@ -234,15 +234,36 @@ const SearchSongs = async (req, res) => {
 
 
 
+const Download = async (req, res) => {
+    const { slug, quality, Name } = req.params;
 
+    try {
+        const fileUrl = `https://content.pagalsongs.online/song-audio/${slug}-${quality}.mp3`;
+        const fileName = `${Name}-${quality} Kbps (Pagalsongs.online).mp3`;
+        res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+        const response = await fetch(fileUrl);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch file: ${response.statusText}`);
+        }
 
+        const reader = response.body.getReader();
+        const streamToClient = async () => {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                res.write(value);
+            }
+            res.end();
+        };
 
+        await streamToClient();
 
-
-
-
-
+    } catch (error) {
+        console.error('Error fetching file:', error);
+        res.status(500).send('Failed to download song');
+    }
+};
 
 module.exports = {
-    GetAllSongs, GetAllSongsDashBoard, UpdateSong, addSong, DeleteSong, GetSingleSong, GetSongsPerCategory, SearchSongs
+    GetAllSongs, GetAllSongsDashBoard, UpdateSong, addSong, DeleteSong, GetSingleSong, GetSongsPerCategory, SearchSongs, Download
 };

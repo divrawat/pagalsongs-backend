@@ -7,12 +7,14 @@ var DeleteSong = require('../controllers/getsongs.js').DeleteSong;
 var GetSingleSong = require('../controllers/getsongs.js').GetSingleSong;
 var GetSongsPerCategory = require('../controllers/getsongs.js').GetSongsPerCategory;
 var SearchSongs = require('../controllers/getsongs.js').SearchSongs;
+var Download = require('../controllers/getsongs.js').Download;
 var authController = require('../controllers/auth.js');
 
 var router = express.Router();
 
 router.get('/get-single-song/:slug', GetSingleSong);
 router.get('/getallsongs', GetAllSongs);
+router.get('/download/:slug/:quality/:Name', Download);
 
 router.get('/category/get-songs', GetSongsPerCategory);
 router.get('/search-songs', SearchSongs);
