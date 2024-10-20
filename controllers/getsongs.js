@@ -8,7 +8,7 @@ const GetAllSongs = async (req, res) => {
     try {
         const totalCount = await Song.countDocuments().exec();
         const page = Number(req.query.page) || 1;
-        const perPage = 50;
+        const perPage = 200;
         const { search } = req.query;
         const query = { $and: [{ name: { $regex: search, $options: 'i' } }] };
         const skip = (page - 1) * perPage;
@@ -46,6 +46,8 @@ const GetAllSongsDashBoard = async (req, res) => {
 
 const UpdateSong = async (req, res) => {
     const { id } = req.params;
+
+
     upload.none()(req, res, async (err) => {
         if (err) { return res.status(400).json({ error: 'Something went wrong' }); }
 
@@ -54,8 +56,9 @@ const UpdateSong = async (req, res) => {
             if (!song) { return res.status(404).json({ error: 'song not found' }); }
 
             const { Name, singer, duration, slug, label, Categories, size, music, lyrics } = req.body;
+
             const updatefields = req.body;
-            // console.log(req.body);
+            console.log(req.body.slug);
 
             Object.keys(updatefields).forEach((key) => {
                 if (key === 'Name') { song.Name = Name; }
@@ -65,13 +68,17 @@ const UpdateSong = async (req, res) => {
                 else if (key === 'label') { song.label = label; }
                 else if (key === 'size') { song.size = size; }
                 else if (key === 'lyrics') { song.lyrics = lyrics; }
-                else if (key === 'slug') { song.slug = slugify(updatefields.slug).toLowerCase(); }
+                else if (key === 'slug') { song.slug = slug }
                 else if (key === 'Categories') { song.Categories = Categories; }
             });
 
             const savedsong = await song.save();
+            console.log("Song Slug", savedsong.slug);
+
 
             return res.status(200).json(savedsong);
+
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({ error: "Internal Server Error" });
@@ -236,6 +243,7 @@ const SearchSongs = async (req, res) => {
 
 const Download = async (req, res) => {
     const { slug, quality, Name } = req.params;
+
 
     try {
         const fileUrl = `https://content.pagalsongs.online/song-audio/${slug}-${quality}.mp3`;

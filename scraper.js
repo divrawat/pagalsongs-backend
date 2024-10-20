@@ -15,6 +15,9 @@ exports.scrapeAndDownload = function (pageUrl) {
             var cleanedSongName = songName.split(' Song Download')[0].trim();
             var cleanedSlug = slug;
 
+            console.log(slug);
+
+
             songDetails.Name = cleanedSongName;
             songDetails.slug = cleanedSlug;
             songDetails.size = $('table tr:contains("Size")').find('b').text().trim();

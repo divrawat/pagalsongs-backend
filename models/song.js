@@ -51,8 +51,8 @@ var songSchema = new mongoose.Schema(
             trim: true,
         },
     },
-    { timestamps: { createdAt: false, updatedAt: false } },
-    { versionKey: false }
+    { timestamps: { createdAt: true, updatedAt: false } },
+    // { versionKey: false }
 );
 
 // Export the model

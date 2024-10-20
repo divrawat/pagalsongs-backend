@@ -10,7 +10,7 @@ var getallsongRoutes = require('./routes/getallsongs');
 var authRoutes = require('./routes/auth');
 var contactRoutes = require('./routes/contact');
 
-// var saveScrapedDataOnStartup = require('./controllers/song').saveScrapedDataOnStartup;
+var saveScrapedDataOnStartup = require('./controllers/song').saveScrapedDataOnStartup;
 
 var app = express();
 
