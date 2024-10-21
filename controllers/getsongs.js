@@ -29,7 +29,7 @@ const GetAllSongs = async (req, res) => {
         const skip = (page - 1) * perPage;
         const data = await Song.find(query).select('Name slug singer duration -_id').skip(skip).limit(perPage).exec();
 
-        await redis.set(cacheKey, JSON.stringify(data), 'EX', 3600);
+        await redis.set(cacheKey, JSON.stringify({ totalCount, data }), 'EX', 3600);
 
         res.json({
             status: true,
