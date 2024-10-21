@@ -2,7 +2,7 @@ const Song = require('../models/song');
 const multer = require('multer');
 const slugify = require('slugify');
 const upload = multer({});
-import Redis from 'ioredis';
+const Redis = require('ioredis');
 
 const redis = new Redis({
     host: 'patient-puma-43077.upstash.io',
