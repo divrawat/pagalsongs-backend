@@ -13,12 +13,10 @@ const redis = new Redis({
 
 const GetAllSongs = async (req, res) => {
 
-    const cacheKey = 'most_recent_chapters';
+    const cacheKey = 'allsongs';
     const cachedData = await redis.get(cacheKey);
 
-    if (cachedData) {
-        return res.status(200).json(JSON.parse(cachedData));
-    }
+    if (cachedData) { return res.status(200).json(JSON.parse(cachedData)); }
 
     try {
         const totalCount = await Song.countDocuments().exec();
@@ -29,7 +27,8 @@ const GetAllSongs = async (req, res) => {
         const skip = (page - 1) * perPage;
         const data = await Song.find(query).select('Name slug singer duration -_id').skip(skip).limit(perPage).exec();
 
-        await redis.set(cacheKey, JSON.stringify({ totalCount, data }), 'EX', 3600);
+
+        await redis.set(cacheKey, JSON.stringify({ totalsongs: totalCount, data }), 'EX', 3600);
 
         res.json({
             status: true,
